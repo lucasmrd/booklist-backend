@@ -2,7 +2,6 @@ package com.facens.booklist.service;
 
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.core.error.UserNotFoundException;
-import com.couchbase.client.core.error.context.ErrorContext;
 import com.facens.booklist.dto.request.AtualizarLivroRequest;
 import com.facens.booklist.dto.request.CriarLivroRequest;
 import com.facens.booklist.dto.response.MostrarLivroResponse;
