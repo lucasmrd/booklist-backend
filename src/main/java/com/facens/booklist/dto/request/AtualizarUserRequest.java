@@ -5,5 +5,8 @@ import jakarta.validation.constraints.Email;
 public record AtualizarUserRequest(
         @Email
         String email,
+
+        String nome,
+
         String senha) {
 }

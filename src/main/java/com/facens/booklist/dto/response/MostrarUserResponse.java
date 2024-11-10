@@ -4,9 +4,10 @@ import com.facens.booklist.entity.User;
 
 public record MostrarUserResponse(
         String id,
-        String email) {
+        String email,
+        String nome) {
 
     public MostrarUserResponse(User user) {
-        this(user.getId(), user.getEmail());
+        this(user.getId(), user.getEmail(), user.getNome());
     }
 }
