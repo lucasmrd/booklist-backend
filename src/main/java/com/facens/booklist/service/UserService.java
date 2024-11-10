@@ -5,9 +5,11 @@ import com.facens.booklist.dto.request.AtualizarUserRequest;
 import com.facens.booklist.dto.request.CriarUserRequest;
 import com.facens.booklist.dto.response.MostrarUserResponse;
 import com.facens.booklist.entity.User;
+import com.facens.booklist.infra.exception.EmailAlreadyUsedException;
 import com.facens.booklist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,10 +20,19 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public ResponseEntity criar(CriarUserRequest dto,
                                 UriComponentsBuilder uriBuilder) {
-        var user = new User(dto);
+
+        if (repository.findByEmail(dto.email()).isPresent()) {
+            throw new EmailAlreadyUsedException();
+        }
+
+        var user = new User(dto, passwordEncoder);
+
         repository.save(user);
         var response = new MostrarUserResponse(user);
 
