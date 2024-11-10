@@ -1,6 +1,6 @@
 package com.facens.booklist.controller;
 
-import com.facens.booklist.dto.request.CriarUserRequest;
+import com.facens.booklist.dto.request.LogarUserRequest;
 import com.facens.booklist.dto.response.DadosJWTResponse;
 import com.facens.booklist.entity.User;
 import com.facens.booklist.service.TokenService;
@@ -25,7 +25,7 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity efetuarLogin(@RequestBody @Valid CriarUserRequest dto) {
+    public ResponseEntity efetuarLogin(@RequestBody @Valid LogarUserRequest dto) {
         var token = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
         var authentication = manager.authenticate(token);
 
