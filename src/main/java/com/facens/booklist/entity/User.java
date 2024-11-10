@@ -61,6 +61,10 @@ public class User implements UserDetails {
         livros.add(livro);
     }
 
+    public void removerLivro(Livro livro) {
+        livros.remove(livro);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));

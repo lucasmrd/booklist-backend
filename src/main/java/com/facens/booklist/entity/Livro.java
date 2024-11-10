@@ -2,10 +2,7 @@ package com.facens.booklist.entity;
 
 import com.facens.booklist.dto.request.AtualizarLivroRequest;
 import com.facens.booklist.dto.request.CriarLivroRequest;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Livro {
 
     @Id

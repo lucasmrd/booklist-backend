@@ -22,8 +22,9 @@ public class LivroController {
 
     @PostMapping
     public ResponseEntity criarLivro(@RequestBody @Valid CriarLivroRequest dto,
+                                    @RequestHeader("Authorization") String token,
                                     UriComponentsBuilder uriBuilder) {
-        return service.criarLivro(dto, uriBuilder);
+        return service.criarLivro(dto, token, uriBuilder);
     }
 
     @GetMapping("/{id}")
@@ -43,7 +44,8 @@ public class LivroController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deletarLivroPorId(@PathVariable String id) {
-        return service.deletarLivroPorID(id);
+    public ResponseEntity deletarLivroPorId(@PathVariable String id,
+                                            @RequestHeader("Authorization") String token) {
+        return service.deletarLivroPorID(id, token);
     }
 }

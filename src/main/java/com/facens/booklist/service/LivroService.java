@@ -6,11 +6,14 @@ import com.facens.booklist.dto.request.AtualizarLivroRequest;
 import com.facens.booklist.dto.request.CriarLivroRequest;
 import com.facens.booklist.dto.response.MostrarLivroResponse;
 import com.facens.booklist.entity.Livro;
+import com.facens.booklist.entity.User;
 import com.facens.booklist.repository.LivroRepository;
+import com.facens.booklist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,10 +24,25 @@ public class LivroService {
     @Autowired
     private LivroRepository repository;
 
-    @Transactional
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private UserRepository userRepository;
+
     public ResponseEntity criarLivro(CriarLivroRequest dto,
+                                     String token,
                                      UriComponentsBuilder uriBuilder) {
+
+        String userEmail = tokenService.getSubject(token.replace("Bearer ", ""));
+        var user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado", ""));
+
         var livro = new Livro(dto);
+        user.adicionarLivro(livro);
+        userRepository.deleteById(user.getId());
+        userRepository.save(user);
+
         repository.save(livro);
         var response = new MostrarLivroResponse(livro);
 
@@ -58,9 +76,17 @@ public class LivroService {
         return ResponseEntity.ok(new MostrarLivroResponse(livro));
     }
 
-    public ResponseEntity deletarLivroPorID(String id) {
+    public ResponseEntity deletarLivroPorID(String id, String token) {
+        String userEmail = tokenService.getSubject(token.replace("Bearer ", ""));
+        var user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado", ""));
+
         var livro = repository.
                 findById(id).orElseThrow(() -> new UserNotFoundException("Livro não encontrado", ""));
+
+        user.removerLivro(livro);
+        userRepository.deleteById(user.getId());
+        userRepository.save(user);
 
         repository.deleteById(id);
 
