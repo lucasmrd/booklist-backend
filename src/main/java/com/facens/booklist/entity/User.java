@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,8 @@ public class User implements UserDetails {
 
     private String senha;
 
+    private List<Livro> livros = new ArrayList<>();
+
     public User(CriarUserRequest dto, PasswordEncoder passwordEncoder) {
         this.id = "user::" + UUID.randomUUID();
         this.email = dto.email();
@@ -52,6 +55,10 @@ public class User implements UserDetails {
         if (!request.senha().isBlank()) {
             this.senha = request.senha();
         }
+    }
+
+    public void adicionarLivro(Livro livro) {
+        livros.add(livro);
     }
 
     @Override
