@@ -27,6 +27,11 @@ public class UserController {
         return service.mostrarUserPorId(id);
     }
 
+    @GetMapping
+    public ResponseEntity mostrarUserLogado(@RequestHeader("Authorization") String token) {
+        return service.mostrarUserLogado(token);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity atualizarUserPorId(@RequestBody @Valid AtualizarUserRequest request,
                                              @PathVariable String id) {

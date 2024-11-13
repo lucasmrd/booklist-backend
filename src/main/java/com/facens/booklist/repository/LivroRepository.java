@@ -7,3 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LivroRepository extends CouchbaseRepository<Livro, String> {
 }
+
+
+
+
+

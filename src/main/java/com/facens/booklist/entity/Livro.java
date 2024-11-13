@@ -22,13 +22,18 @@ public class Livro {
     private String capa;
     private String autor;
     private String sinopse;
+    private String userName;
+    private Boolean lido;
 
-    public Livro(CriarLivroRequest dto) {
+
+    public Livro(CriarLivroRequest dto, String userName) {
         this.id = "livro::" + UUID.randomUUID();
         this.titulo = dto.titulo();
         this.capa = dto.capa();
         this.autor = dto.autor();
         this.sinopse = dto.sinopse();
+        this.userName = userName;
+        this.lido = false;
     }
 
     public void atualizarLivro(AtualizarLivroRequest request) {

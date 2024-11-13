@@ -15,10 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
-public class UserService {
+public class    UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -44,6 +47,17 @@ public class UserService {
     public ResponseEntity mostrarUserPorId(String id) {
         var user = repository.
                 findById(id).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado", ""));
+        var response = new MostrarUserResponse(user);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity mostrarUserLogado(String token) {
+        String userEmail = tokenService.getSubject(token.replace("Bearer ", ""));
+
+        var user = repository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado", ""));
+
         var response = new MostrarUserResponse(user);
 
         return ResponseEntity.ok().body(response);

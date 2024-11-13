@@ -1,5 +1,6 @@
 package com.facens.booklist.controller;
 
+import com.facens.booklist.dto.request.AtualizarLivroLidoRequest;
 import com.facens.booklist.dto.request.AtualizarLivroRequest;
 import com.facens.booklist.dto.request.CriarLivroRequest;
 import com.facens.booklist.dto.response.MostrarLivroResponse;
@@ -33,14 +34,34 @@ public class LivroController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<MostrarLivroResponse>> MostrarTodosOsLivros(@PageableDefault Pageable pageable) {
-        return service.MostrarTodosOsLivros(pageable);
+    public ResponseEntity<Page<MostrarLivroResponse>> mostrarTodosOsLivros(@PageableDefault Pageable pageable,
+                                                                           @RequestHeader("Authorization") String token) {
+        return service.mostrarTodosOsLivros(pageable, token);
+    }
+
+    @GetMapping("/userlivros")
+    public ResponseEntity<Page<MostrarLivroResponse>> mostrarTodosOsLivrosDoUser(@PageableDefault Pageable pageable,
+                                                                                 @RequestHeader("Authorization") String token) {
+        return service.mostrarTodosOsLivrosDoUser(pageable, token);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<MostrarLivroResponse>> buscarLivrosPorTitulo(@PageableDefault Pageable pageable,
+                                                                          @RequestParam String titulo) {
+        return service.buscarLivrosPorTitulo(pageable, titulo);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity atualizarLivroPorId(@RequestBody @Valid AtualizarLivroRequest request,
-                                             @PathVariable String id) {
-        return service.atualizarLivroPorId(request, id);
+                                             @PathVariable String id,
+                                              @RequestHeader("Authorization") String token) {
+        return service.atualizarLivroPorId(request, id, token);
+    }
+
+    @PutMapping("/{id}/lido")
+    public ResponseEntity atualizarLivroLido(@RequestBody @Valid AtualizarLivroLidoRequest request,
+                                              @PathVariable String id) {
+        return service.atualizarLivroLido(request, id);
     }
 
     @DeleteMapping("/{id}")
